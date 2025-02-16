@@ -5,7 +5,9 @@ const { createAccount, getAccounts, getAccountById, updateAccount, deleteAccount
  */
 exports.createAccount = async (req, res) => {
   try {
-    const account = await createAccount(req.body);
+    const {account_name, account_type, balance} = req.body;
+    const data = {user_id:req.user.id, account_name, account_type, balance}
+    const account = await createAccount(data);
     res.status(201).json({ message: "Account created successfully", account });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -17,7 +19,7 @@ exports.createAccount = async (req, res) => {
  */
 exports.getAccounts = async (req, res) => {
   try {
-    const { user_id } = req.query;
+    const { user_id } = req.user.id;
     const accounts = await getAccounts(user_id);
     res.status(200).json(accounts);
   } catch (error) {
